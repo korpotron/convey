@@ -11,8 +11,8 @@ public extension View {
         convey(.done(block))
     }
 
-    func convey<A, B>(transform _: A.Type, transformer: @escaping (A) -> B) -> some View {
-        convey(.transform(transformer))
+    func convey<A, B>(map _: A.Type, mapper: @escaping (A) -> B) -> some View {
+        convey(.map(mapper))
     }
 
     func convey<T>(assign binding: Binding<T?>) -> some View {

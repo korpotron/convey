@@ -33,6 +33,10 @@ public struct ConveyAction {
 }
 
 public extension ConveyAction {
+    static var fatal: Self {
+        .init(parent: .none, handler: .fatal)
+    }
+
     static var unhandled: Self {
         .init(parent: .none, handler: .unhandled)
     }
