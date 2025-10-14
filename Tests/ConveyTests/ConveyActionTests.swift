@@ -1,7 +1,7 @@
 import Testing
 @testable import Convey
 
-@Suite struct ActionTests {
+@Suite struct ConveyActionTests {
     @Test func example_1() {
         let (sut, spy) = ConveyAction.spy()
         #expect(spy.records.count == 0)

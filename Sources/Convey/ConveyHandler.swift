@@ -8,16 +8,8 @@ public struct ConveyHandler {
 
     private let block: (Any) -> Result
 
-    private init(block: @escaping (Any) -> Result) {
-        self.block = block
-    }
-
-    public func execute(_ value: Any) -> Result {
-        block(value)
-    }
-
-    static func process<T>(block: @escaping (T) -> Result) -> Self {
-        .init { value in
+    private init<T>(block: @escaping (_ value: T) -> Result) {
+        self.block = { value in
             if let value = value as? T {
                 block(value)
             } else {
@@ -25,20 +17,23 @@ public struct ConveyHandler {
             }
         }
     }
+
+    public func execute(_ value: Any) -> Result {
+        block(value)
+    }
 }
 
 public extension ConveyHandler {
     static func done<T>(_ block: @escaping (T) -> Void) -> Self {
-        .process { value in
+        .init { value in
             block(value)
             return .done
         }
     }
 
-    static func transform<A, B>(_ transformer: @escaping (A) -> B) -> Self {
-        .process { value in
-            let new = transformer(value)
-            return .next(new)
+    static func map<A, B>(_ mapper: @escaping (A) -> B) -> Self {
+        .init { value in
+            .next(mapper(value))
         }
     }
 

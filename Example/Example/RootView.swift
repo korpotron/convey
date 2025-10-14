@@ -70,7 +70,7 @@ struct Wrapper: View {
             }
         }
         .navigationTitle(current.rawValue)
-        .convey(transform: Transform.self) { value in
+        .convey(map: Transform.self) { value in
             switch value {
             case .bump: Local.increment
             }

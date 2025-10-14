@@ -9,13 +9,17 @@ public struct ConveyAction {
     private let parent: Parent
     private let handler: ConveyHandler
 
-    init(parent: Parent, handler: ConveyHandler) {
+    private init(parent: Parent, handler: ConveyHandler) {
         self.parent = parent
         self.handler = handler
     }
 
-    init(parent: Self, handler: ConveyHandler) {
-        self.init(parent: .some(parent), handler: handler)
+    static func root(handler: ConveyHandler) -> Self {
+        .init(parent: .none, handler: handler)
+    }
+
+    func chaining(_ handler: ConveyHandler) -> ConveyAction {
+        .init(parent: .some(self), handler: handler)
     }
 
     public func callAsFunction(_ value: Any) {
@@ -24,20 +28,20 @@ public struct ConveyAction {
         switch (result, parent) {
         case (.done, _):
             break
-        case (.next(let value), .some(let parent)):
+        case let (.next(value), .some(parent)):
             parent(value)
         case (.next, .none):
-            break
+            fatalError("panic")
         }
     }
 }
 
 public extension ConveyAction {
-    static var unhandled: Self {
-        .init(parent: .none, handler: .unhandled)
+    static var fatal: Self {
+        .root(handler: .fatal)
     }
 
-    func chaining(_ handler: ConveyHandler) -> ConveyAction {
-        .init(parent: self, handler: handler)
+    static var unhandled: Self {
+        .root(handler: .unhandled)
     }
 }
