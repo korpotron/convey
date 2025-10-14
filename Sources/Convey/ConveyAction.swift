@@ -31,7 +31,7 @@ public struct ConveyAction {
         case let (.next(value), .some(parent)):
             parent(value)
         case (.next, .none):
-            break
+            fatalError("panic")
         }
     }
 }

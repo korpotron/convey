@@ -27,7 +27,7 @@ extension ConveyHandler {
 extension ConveyAction {
     static func spy() -> (ConveyAction, Spy) {
         let (handler, spy) = ConveyHandler.spy()
-        let action = ConveyAction(parent: .none, handler: handler)
+        let action = ConveyAction.root(handler: handler)
         return (action, spy)
     }
 }
